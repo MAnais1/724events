@@ -13,14 +13,12 @@ import Modal from "../../containers/Modal";
 import { useData } from "../../contexts/DataContext";
 
 const Page = () => {
-  const last = useData();
-    
-    
-  if (!last?.data?.events || last.data.events.length === 0) {
-    return <div>Chargement des événements...</div>;
-  }
-  const lastEvent = last.data.events[0];
-  console.log("last", last);
+  const { data } = useData();
+
+  const lastEvent = data?.events
+    ? data.events.sort((a, b) => new Date(b.date) - new Date(a.date)).shift()
+    : null;
+  console.log(lastEvent);
 
   return (
     <>
@@ -123,11 +121,11 @@ const Page = () => {
         <div className="col presta">
           <h3>Notre derniére prestation</h3>
           <EventCard
-            imageSrc={lastEvent.cover}
-            title={lastEvent.title}
-            date={new Date(lastEvent.date)}
+            imageSrc={lastEvent?.cover}
+            title={lastEvent?.title}
+            date={new Date(lastEvent?.date)}
             small
-            label={lastEvent.type}
+            label={lastEvent?.type}
           />
         </div>
         <div className="col contact">
